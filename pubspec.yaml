@@ -35,6 +35,12 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  table_calendar: ^3.0.9
+  intl: ^0.18.1 # 다국어 처리 관련
+  drift: ^2.7.0
+  sqlite3_flutter_libs: ^0.5.0
+  path_provider: ^2.0.0
+
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +52,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  drift_dev: ^2.7.0
+  build_runner: ^2.3.3
+
+dependency_overrides:
+  path: ^1.8.3 # 버전에 문제가 있을 땐, dependency_overrides에 정의
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -62,6 +73,21 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+  fonts:
+    - family: NotoSans
+      fonts:
+        - asset: asset/font/NotoSansKR-Black.otf
+          weight: 900
+        - asset: asset/font/NotoSansKR-Bold.otf
+          weight: 700
+        - asset: asset/font/NotoSansKR-Medium.otf
+          weight: 500
+        - asset: asset/font/NotoSansKR-Regular.otf
+          weight: 400
+        - asset: asset/font/NotoSansKR-Light.otf
+          weight: 300
+        - asset: asset/font/NotoSansKR-Thin.otf
+          weight: 100
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
