@@ -27,7 +27,7 @@ class Calendar extends StatelessWidget {
     );
 
     return TableCalendar(
-      locale: 'ko_KR', // 다국어 처리
+      locale: 'ko_KR', // 달력 다국어 처리
       // 보여지는 기준 날짜
       focusedDay: focusedDay, // widget. => statefulWidget의 변수를 받아올 수 있음
       // 달력의 가장 첫 번째 날짜
