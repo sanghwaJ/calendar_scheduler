@@ -2,16 +2,18 @@ import 'package:calendar_scheduler/const/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class Calendar extends StatefulWidget {
-  const Calendar({Key? key}) : super(key: key);
+// 상태 관리는 home_screen에서 하기 때문에 StatelessWidget으로 선언
+class Calendar extends StatelessWidget {
+  final DateTime? selectedDay;
+  final DateTime focusedDay;
+  final OnDaySelected? onDaySelected;
 
-  @override
-  State<Calendar> createState() => _CalendarState();
-}
-
-class _CalendarState extends State<Calendar> {
-  DateTime? selectedDay;
-  DateTime focusedDay = DateTime.now();
+  const Calendar({
+    required this.selectedDay,
+    required this.focusedDay,
+    required this.onDaySelected,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class _CalendarState extends State<Calendar> {
     return TableCalendar(
       locale: 'ko_KR', // 다국어 처리
       // 보여지는 기준 날짜
-      focusedDay: focusedDay,
+      focusedDay: focusedDay, // widget. => statefulWidget의 변수를 받아올 수 있음
       // 달력의 가장 첫 번째 날짜
       firstDay: DateTime(1800),
       // 달력의 가장 마지막 날짜
@@ -66,14 +68,7 @@ class _CalendarState extends State<Calendar> {
           color: PRIMARY_COLOR,
         ),
       ),
-      onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-        setState(() {
-          // 빌드 재실행, 빌드가 재실행될 때마다 selectedDay, focusedDay 업데이트
-          this.selectedDay = selectedDay;
-          // focusedDay를 selectedDay로 업데이트하여 달력 시점 이동
-          this.focusedDay = selectedDay;
-        });
-      },
+      onDaySelected: onDaySelected,
       selectedDayPredicate: (DateTime date) {
         // 빌드가 재실행될 때마다 아래의 코드 실행
         if (selectedDay == null) {
