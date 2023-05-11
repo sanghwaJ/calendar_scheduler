@@ -8,6 +8,8 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../model/schedule_with_color.dart';
+
 // part => private 값도 불러올 수 있음
 part 'drift_database.g.dart'; // 'g'를 붙이면 해당 파일을 자동으로 생성해줌
 
@@ -39,40 +41,53 @@ class LocalDatabase extends _$LocalDatabase {
   /**
    * select
    */
+  // .get() => Future로 받을 수 있음 (단발성)
   Future<List<CategoryColor>> getCategoryColors() =>
       select(categoryColors).get();
 
-  // Future<int> updateScheduleById(int id, SchedulesCompanion data) =>
-  //     (update(schedules)..where((tbl) => tbl.id.equals(id))).write(data);
-  //
-  // Future<int> removeSchedule(int id) =>
-  //     (delete(schedules)..where((tbl) => tbl.id.equals(id))).go();
-  //
-  // Stream<List<ScheduleWithColor>> watchSchedules(DateTime date) {
-  //   final query = select(schedules).join([
-  //     innerJoin(categoryColors, categoryColors.id.equalsExp(schedules.colorId))
-  //   ]);
-  //
-  //   query.where(schedules.date.equals(date));
-  //   query.orderBy(
-  //     [
-  //       // asc -> ascending 오름차순
-  //       // desc -> descending 내림차순
-  //       OrderingTerm.asc(schedules.startTime),
-  //     ],
-  //   );
-  //
-  //   return query.watch().map(
-  //         (rows) => rows
-  //             .map(
-  //               (row) => ScheduleWithColor(
-  //                 schedule: row.readTable(schedules),
-  //                 categoryColor: row.readTable(categoryColors),
-  //               ),
-  //             )
-  //             .toList(),
-  //       );
-  // }
+  // .watch() => Stream으로 받을 수 있어 지속적으로 값이 업데이트됨
+  Stream<List<ScheduleWithColor>> watchSchedules(DateTime date) {
+    final query = select(schedules).join([
+      innerJoin(
+          categoryColors,
+          categoryColors.id
+              .equalsExp(schedules.colorId)) // equalsExp => on과 같이 조인 조건 동등 비교
+    ]);
+
+    // 실제로 어떤 테이블에서 where 조건을 적용할지 명시
+    query.where(schedules.date.equals(date));
+    query.orderBy(
+      [
+        // asc => ascending 오름차순
+        // desc => descending 내림차순
+        OrderingTerm.asc(schedules.startTime),
+      ],
+    );
+
+    return query.watch().map(
+          (rows) => rows
+              .map(
+                (row) => ScheduleWithColor(
+                  schedule: row.readTable(schedules),
+                  categoryColor: row.readTable(categoryColors),
+                ),
+              )
+              .toList(),
+        );
+    // Future<int> removeSchedule(int id) =>
+    //     (delete(schedules)..where((tbl) => tbl.id.equals(id))).go();
+
+    // Stream<List<Schedule>> watchSchedules(DateTime date) =>
+    //     (select(schedules)..where((tbl) => tbl.date.equals(date))).watch();
+
+    // Future<int> updateScheduleById(int id, SchedulesCompanion data) =>
+    //     (update(schedules)..where((tbl) => tbl.id.equals(id))).write(data);
+    //
+  }
+
+  // .go() => 삭제
+  Future<int> removeSchedule(int id) =>
+      (delete(schedules)..where((tbl) => tbl.id.equals(id))).go();
 
   @override
   int get schemaVersion => 1; // 스키마가 변경될 때마다 버전을 올려줘야 함

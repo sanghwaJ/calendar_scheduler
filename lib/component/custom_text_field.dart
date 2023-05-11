@@ -84,6 +84,7 @@ class CustomTextField extends StatelessWidget {
         border: InputBorder.none,
         filled: true,
         fillColor: Colors.grey[300],
+        suffixText: isTime ? '시' : null, // 클릭할 때마다 보이는 접미사
       ),
     );
   }

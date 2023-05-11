@@ -1,6 +1,7 @@
 import 'package:calendar_scheduler/screen/home_screen.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:calendar_scheduler/database/drift_database.dart';
 
@@ -31,6 +32,9 @@ void main() async {
    * database 설정
    */
   final database = LocalDatabase();
+
+  // Dependency Injection => 파라미터를 따로 넘기지 않아도 어디서든 사용이 가능
+  GetIt.I.registerSingleton<LocalDatabase>(database);
 
   /**
    * Colors data init
