@@ -6,11 +6,13 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final bool isTime; // true => 시간 || false => 내용
   final FormFieldSetter<String> onSaved;
+  final String initialValue;
 
   const CustomTextField({
     required this.label,
     required this.isTime,
     required this.onSaved,
+    required this.initialValue,
     Key? key,
   }) : super(key: key);
 
@@ -67,6 +69,7 @@ class CustomTextField extends StatelessWidget {
       // 저장 시, TextFormField 상위에 있는 Form에서 save 함수가 불렸을 때, 실행
       onSaved: onSaved,
       cursorColor: Colors.grey,
+      initialValue: initialValue, // 초기값 지정
       // TextInputType.number => number 키보드 호출
       // TextInputType.multiline => 기본 키보드 호출
       keyboardType: isTime ? TextInputType.number : TextInputType.multiline,

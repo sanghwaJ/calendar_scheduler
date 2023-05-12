@@ -133,20 +133,37 @@ class _ScheduleList extends StatelessWidget {
 
                   // Dismissible => Swipe하여 삭제가 가능하도록 하는 위젯
                   return Dismissible(
-                    key: ObjectKey(scheduleWithColor.schedule.id), // 어떤 위젯을 선택하는지 알 수 있는 key 값
+                    key: ObjectKey(scheduleWithColor
+                        .schedule.id), // 어떤 위젯을 선택하는지 알 수 있는 key 값
                     direction: DismissDirection.endToStart,
                     // Swipe를 한 순간, 실행되는 함수
-                    onDismissed: (DismissDirection direction){
-                      GetIt.I<LocalDatabase>().removeSchedule(scheduleWithColor.schedule.id);
+                    onDismissed: (DismissDirection direction) {
+                      GetIt.I<LocalDatabase>()
+                          .removeSchedule(scheduleWithColor.schedule.id);
                     },
-                    child: ScheduleCard(
-                      startTime: scheduleWithColor.schedule.startTime,
-                      endTime: scheduleWithColor.schedule.endTime,
-                      content: scheduleWithColor.schedule.content,
-                      color: Color(
-                        int.parse(
-                          'FF${scheduleWithColor.categoryColor.hexCode}',
-                          radix: 16,
+                    child: GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          // isScrollControlled: true => default height 값을 늘려줌
+                          isScrollControlled: true,
+                          builder: (_) {
+                            return ScheduleBottomSheet(
+                              selectedDate: selectedDate,
+                              scheduleId: scheduleWithColor.schedule.id,
+                            );
+                          },
+                        );
+                      },
+                      child: ScheduleCard(
+                        startTime: scheduleWithColor.schedule.startTime,
+                        endTime: scheduleWithColor.schedule.endTime,
+                        content: scheduleWithColor.schedule.content,
+                        color: Color(
+                          int.parse(
+                            'FF${scheduleWithColor.categoryColor.hexCode}',
+                            radix: 16,
+                          ),
                         ),
                       ),
                     ),
